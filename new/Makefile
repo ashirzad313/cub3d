@@ -1,0 +1,73 @@
+# COMPILER
+CC = cc
+FLAGS = -Wall -Wextra -Werror -Ofast -Wunreachable-code -g #-fsanitize=address
+
+SRC_DIR = srcs
+INC_DIR = inc
+OBJ_DIR = obj
+
+NAME = cub3D
+
+# LIBRARY NAME
+LIBFT = libft.a
+LIBFT_DIR = libft
+
+# MLX LIBRARY
+MLX_DIR = mlx42
+MLX_FLAGS = ./MLX42/build/libmlx42.a -Iinclude -lglfw -framework Cocoa -framework OpenGL -framework IOKit
+MLX_INC = -I$(MLX_DIR)
+
+# LIST OF SOURCE FILES
+SRCS = $(SRC_DIR)/main.c $(SRC_DIR)/utils.c $(SRC_DIR)/init.c $(SRC_DIR)/parse_txt_col.c \
+	$(SRC_DIR)/parse_utils.c $(SRC_DIR)/parse_map.c $(SRC_DIR)/execution.c $(SRC_DIR)/check_map.c \
+	$(SRC_DIR)/exec_utils.c $(SRC_DIR)/moves.c $(SRC_DIR)/raycasting.c
+#	$(SRC_DIR)/move.c
+
+# replaces the src directory with the obj directory for the .o files
+ OBJS = $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRCS))
+
+# compies the source files to object files in the main directory
+#OBJS = $(SRCS:.c=.o)
+
+# COLORS
+GREEN = \033[0;32m
+NC = \033[0m
+
+# ALL RULE
+# RULES TO MAKE EXECUTABLE AND LIBFT AND MLX
+all: $(LIBFT) $(NAME)
+	@echo "$(GREEN)cub3d build successful$(NC)"
+
+$(NAME): $(OBJS)
+	@$(CC) $(FLAGS) -I$(INC_DIR) $(MLX_INC) $(OBJS) -L$(LIBFT_DIR) -lft $(MLX_FLAGS) -o $(NAME)
+
+# RULES FOR CREATING OBJECT FILES
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
+	@mkdir -p $(OBJ_DIR)
+	@$(CC) $(FLAGS) -I$(INC_DIR) $(MLX_INC) -c $< -o $@
+
+# LIBFT RULES
+$(LIBFT):
+	@make -C $(LIBFT_DIR)
+
+# MLX TARGET
+mlx:
+	git clone https://github.com/ashirzad313/MLX42.git mlx42
+
+# CLEAN RULES
+clean:
+	@rm -rf $(OBJ_DIR)
+	@make -C $(LIBFT_DIR) clean
+
+fclean: clean
+	@rm -f $(NAME)
+	@make -C $(LIBFT_DIR) fclean
+	@echo "$(GREEN)FdF fcleaned$(NC)"
+
+re: fclean all
+
+ree:
+	@rm -rf $(OBJ_DIR) $(NAME)
+	@echo "$(GREEN)FdF ree/ just obj from cub3d wihtou mlf for speeed tests $(NC)"
+
+.PHONY: all clean fclean re
