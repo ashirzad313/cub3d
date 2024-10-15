@@ -1,0 +1,17 @@
+WE textures/bricks/brick_orange.pngg
+
+SO textures/bricks/brick_red.png
+
+NO textures/bricks/brick_purple.png
+EA textures/bricks/brick_green.png
+
+
+
+F 1,1,1
+C 1,1,1
+
+1111111111111111111111111
+1000000000000000000000001
+100000000000N000000000001
+1000000000000000000000001
+1111111111111111111111111
